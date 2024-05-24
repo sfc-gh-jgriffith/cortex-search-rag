@@ -1,0 +1,9 @@
+{
+    "account"               : "",
+    "user"                  : "",
+    "password"              : "",
+    "role"                  : "ACCOUNTADMIN",
+    "warehouse"             : "XSMALL",
+    "database"              : "SEC_CORTEX_DEMO",
+    "schema"                : "PUBLIC"
+  }
