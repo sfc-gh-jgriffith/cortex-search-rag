@@ -1,7 +1,7 @@
 # Import python packages
 import streamlit as st
-from snowflake.snowpark import Session
-from snowflake.snowpark.functions import col, call_function
+from snowflake.snowpark.context import get_active_session
+from snowflake.snowpark.functions import col
 from snowflake.cortex import Complete
 
 from snowflake.core import Root
@@ -11,22 +11,14 @@ import json
 # Write directly to the app
 st.title("	:chart_with_upwards_trend: 10-K Explorer")
 
-# connect to Snowflake
-@st.cache_resource()
-def get_snowflake_session():
-    connection_parameters = json.load(open('connection.json'))
-    session = Session.builder.configs(connection_parameters).create()
-    session.sql_simplifier_enabled = True
+session = get_active_session()
 
-    root = Root(session)
-    search_service = (root
-                    .databases["SEC_CORTEX_DEMO"]
-                    .schemas["PUBLIC"]
-                    .cortex_search_services["SEC_10K_SEARCH_SERVICE"]
-    )
-    return session, search_service
-
-session, search_service = get_snowflake_session()
+root = Root(session)
+search_service = (root
+                .databases["SEC_CORTEX_DEMO"]
+                .schemas["PUBLIC"]
+                .cortex_search_services["SEC_10K_SEARCH_SERVICE"]
+)
 
 with st.sidebar:
     selected_model = st.selectbox("Select LLM",
